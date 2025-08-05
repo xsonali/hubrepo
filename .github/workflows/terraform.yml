@@ -12,27 +12,35 @@ jobs:
     env:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
     steps:
-      - name: ⬇️ Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 🛠️ Setup Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
 
-      - name: 📦 Terraform Init
+      - name: Login to Azure
+        run: |
+          az login --service-principal \
+            --username ${{ env.ARM_CLIENT_ID }} \
+            --password ${{ env.ARM_CLIENT_SECRET }} \
+            --tenant ${{ env.ARM_TENANT_ID }}
+          az account set --subscription ${{ env.ARM_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
         run: terraform init
 
-      - name: ✅ Terraform Validate
+      - name: Terraform Validate
         run: terraform validate
 
-      - name: 📐 Terraform Plan
+      - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-      - name: 🚀 Terraform Apply
+      - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan
