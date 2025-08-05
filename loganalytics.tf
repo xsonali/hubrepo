@@ -49,7 +49,7 @@ resource "azurerm_monitor_metric_alert" "rdp_alert" {
 
   criteria {
     metric_namespace = "Microsoft.Network/azureFirewalls"
-    metric_name      = "FirewallThroughput"
+    metric_name      = "TunnelIngressBytes"
     aggregation      = "Average"
     operator         = "GreaterThan"
     threshold        = 1000000
@@ -83,7 +83,7 @@ AzureDiagnostics
 | where count_ > 100
   KQL
 
-  tactics             = ["Execution"]
+  tactics             = ["Discovery"]
   techniques          = ["T1046"]
   suppression_enabled = false
 

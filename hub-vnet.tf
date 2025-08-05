@@ -93,6 +93,10 @@ resource "azurerm_virtual_machine" "mgmt_vm" {
   tags = {
     environment = local.prefix_hub
   }
+
+  depends_on = [
+    azurerm_network_interface.mgmt_nic
+  ]
 }
 
 # Virtual Network Gateway
@@ -104,7 +108,6 @@ resource "azurerm_public_ip" "hub_vpn_gw-pip1" {
 
   allocation_method = "Static"
   sku               = "Standard"
-  zones             = ["1"]
 }
 
 resource "azurerm_virtual_network_gateway" "hub_vnet_gw" {

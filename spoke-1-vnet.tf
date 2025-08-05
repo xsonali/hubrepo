@@ -60,47 +60,35 @@ resource "azurerm_network_interface" "spoke1_nic" {
 }
 
 # Virtual Machine in Spoke1
-resource "azurerm_virtual_machine" "spoke1_vm" {
+resource "azurerm_linux_virtual_machine" "spoke1_vm" {
   name                  = "${local.prefix_spoke1}-vm"
   location              = azurerm_resource_group.spoke1_rg.location
   resource_group_name   = azurerm_resource_group.spoke1_rg.name
+  size                  = var.vmsize
   network_interface_ids = [azurerm_network_interface.spoke1_nic.id]
-  vm_size               = var.vmsize
+  admin_username        = var.admin_user
 
-  storage_image_reference {
+  admin_ssh_key {
+    username   = var.admin_user
+    public_key = var.ssh_public_key
+  }
+
+  os_disk {
+    name                 = "${local.prefix_spoke1}-osdisk"
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
 
-  storage_os_disk {
-    name              = "${local.prefix_spoke1}-osdisk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-
-  os_profile {
-    computer_name  = "${local.prefix_spoke1}-vm"
-    admin_username = var.admin_user
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = true
-
-    ssh_keys {
-      path     = "/home/${var.admin_user}/.ssh/authorized_keys"
-      key_data = var.ssh_public_key
-    }
-  }
+  disable_password_authentication = true
 
   tags = {
     environment = local.prefix_spoke1
-    owner       = "Gholam"
   }
-
-  depends_on = [azurerm_network_interface.spoke1_nic]
 }
-
-
