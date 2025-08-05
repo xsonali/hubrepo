@@ -15,6 +15,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
 
     steps:
       - name: Checkout code
@@ -25,13 +26,13 @@ jobs:
         with:
           terraform_version: 1.6.0
 
-      - name: Login to Azure
+      - name: Azure Login via CLI
         run: |
           az login --service-principal \
-            --username ${{ env.ARM_CLIENT_ID }} \
-            --password ${{ env.ARM_CLIENT_SECRET }} \
-            --tenant ${{ env.ARM_TENANT_ID }}
-          az account set --subscription ${{ env.ARM_SUBSCRIPTION_ID }}
+            --username "${{ env.ARM_CLIENT_ID }}" \
+            --password "${{ env.ARM_CLIENT_SECRET }}" \
+            --tenant "${{ env.ARM_TENANT_ID }}"
+          az account set --subscription "${{ env.ARM_SUBSCRIPTION_ID }}"
 
       - name: Terraform Init
         run: terraform init
@@ -45,3 +46,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan
+
+      - name: Confirm Deployment
+        run: echo "Terraform deployment to Azure completed successfully."

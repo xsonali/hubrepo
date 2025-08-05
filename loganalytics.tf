@@ -1,24 +1,43 @@
 # Diagnostic Settings for Azure Firewall
 resource "azurerm_monitor_diagnostic_setting" "fw_logs" {
-  name                       = "fw-diagnostics"
-  target_resource_id         = azurerm_firewall.hub_fw.id
+  name               = "fw-diagnostics"
+  target_resource_id = azurerm_firewall.hub_fw.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.hub_logs.id
 
-  enabled_log {
+  log {
     category = "AzureFirewallApplicationRule"
+    enabled  = true
+    retention_policy {
+      enabled = false
+      days    = 0
+    }
   }
 
-  enabled_log {
+  log {
     category = "AzureFirewallNetworkRule"
+    enabled  = true
+    retention_policy {
+      enabled = false
+      days    = 0
+    }
   }
 
-  enabled_log {
+  log {
     category = "AzureFirewallDnsProxy"
+    enabled  = true
+    retention_policy {
+      enabled = false
+      days    = 0
+    }
   }
 
   metric {
     category = "AllMetrics"
     enabled  = true
+    retention_policy {
+      enabled = false
+      days    = 0
+    }
   }
 }
 
@@ -40,19 +59,23 @@ resource "azurerm_log_analytics_workspace" "hub_logs" {
 # Metric Alert for RDP Traffic
 resource "azurerm_monitor_metric_alert" "rdp_alert" {
   name                = "rdp-traffic-alert"
-  resource_group_name = azurerm_resource_group.hub_vnet_rg.name
-  scopes              = [azurerm_firewall.hub_fw.id]
-  description         = "Alert on high RDP traffic"
+  resource_group_name = azurerm_resource_group.hub_rg.name
+  scopes              = [azurerm_virtual_network_gateway.vpn_gw.id]
+  description         = "Alert on VPN ingress traffic"
   severity            = 2
   frequency           = "PT5M"
   window_size         = "PT5M"
 
   criteria {
-    metric_namespace = "Microsoft.Network/azureFirewalls"
+    metric_namespace = "Microsoft.Network/virtualNetworkGateways"
     metric_name      = "TunnelIngressBytes"
-    aggregation      = "Average"
+    aggregation      = "Total"
     operator         = "GreaterThan"
-    threshold        = 1000000
+    threshold        = 50000
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.alert_group.id
   }
 }
 
@@ -73,6 +96,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "rdp_spike" {
   trigger_threshold          = 0
   enabled                    = true
   description                = "Detects unusually high RDP traffic through Azure Firewall"
+  depends_on                 = [azurerm_sentinel_log_analytics_workspace_onboarding.hub_logs]
 
   query = <<KQL
 AzureDiagnostics
@@ -95,10 +119,10 @@ AzureDiagnostics
     create_incident_enabled = true
 
     grouping {
-      enabled                 = true
+      enabled                  = true
       reopen_closed_incidents = true
-      lookback_duration       = "PT1H"
-      entity_matching_method  = "AllEntities"
+      lookback_duration        = "PT1H"
+      entity_matching_method   = "AllEntities"
     }
   }
 

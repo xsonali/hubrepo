@@ -1,3 +1,4 @@
 *.bak
 .terraform/
 terraform.tfstate
+*.tfvars
