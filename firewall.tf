@@ -31,7 +31,7 @@ resource "azurerm_public_ip" "firewall_pip1" {
   resource_group_name = azurerm_resource_group.hub_vnet_rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
-  zones               = ["1"]
+  
 
   tags = {
     environment = "hub-vnet"
