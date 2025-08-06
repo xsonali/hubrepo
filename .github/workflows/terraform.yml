@@ -18,7 +18,6 @@ jobs:
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
       P2S_ROOT_CERT: ${{ secrets.var.p2s_root_cert }}
 
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -35,6 +34,13 @@ jobs:
             --password "${{ env.ARM_CLIENT_SECRET }}" \
             --tenant "${{ env.ARM_TENANT_ID }}"
           az account set --subscription "${{ env.ARM_SUBSCRIPTION_ID }}"
+
+      - name: Ensure Terraform backend container exists
+        run: |
+          az storage container create \
+            --name ptstate \
+            --account-name backendstorage747 \
+            --auth-mode login || true
 
       - name: Terraform Init
         run: terraform init
