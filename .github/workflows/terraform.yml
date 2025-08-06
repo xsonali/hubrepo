@@ -42,6 +42,15 @@ jobs:
             --account-name backendstorage747 \
             --auth-mode login || true
 
+      - name: Log Terraform backend container status
+        run: |
+          echo "Checking status of Terraform backend container 'ptstate'..."
+          az storage container show \
+            --name ptstate \
+            --account-name backendstorage747 \
+            --auth-mode login \
+            --output table
+
       - name: Terraform Init
         run: terraform init
 
