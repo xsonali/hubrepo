@@ -11,7 +11,7 @@ resource "azurerm_network_security_group" "mgmt_nsg" {
     access                     = "Allow"
     protocol                   = "Tcp"
     source_address_prefix      = azurerm_firewall.hub_fw.ip_configuration[0].private_ip_address
-	source_port_range          = "*"
+    source_port_range          = "*"
     destination_port_range     = "3389"
     destination_address_prefix = "*"
   }
