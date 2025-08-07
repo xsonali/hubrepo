@@ -25,3 +25,9 @@ output "firewall_private_ip" {
   value = azurerm_firewall.hub_fw.ip_configuration[0].private_ip_address
 }
 
+output "admin_password_test" {
+  value     = var.admin_password
+  sensitive = true
+}
+
+
