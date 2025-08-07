@@ -8,27 +8,27 @@ on:
 
 jobs:
   terraform:
-    name: 🛠️ Terraform Deployment
+    name: 🛠️ Terraform Deployment with Debug Logging
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30  # Prevent runaway jobs
 
     env:
-      # Azure service principal credentials
+      # Azure Credentials
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
-      # Custom inputs
+      # Terraform Variables
       TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
       P2S_ROOT_CERT: ${{ secrets.p2s_root_cert }}
 
     steps:
-      - name: ⬇️ Checkout repository
+      - name: ⬇️ Checkout Repository
         uses: actions/checkout@v3
 
-      - name: ⚙️ Set up Terraform
+      - name: ⚙️ Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
@@ -41,14 +41,14 @@ jobs:
             --tenant "${ARM_TENANT_ID}"
           az account set --subscription "${ARM_SUBSCRIPTION_ID}"
 
-      - name: 📦 Create backend container (if needed)
+      - name: 📦 Ensure Backend Container Exists
         run: |
           az storage container create \
             --name ptstate \
             --account-name backendstorage747 \
             --auth-mode login || true
 
-      - name: 🔍 Check backend container status
+      - name: 🔍 Check Backend Container Status
         run: |
           az storage container show \
             --name ptstate \
@@ -56,7 +56,7 @@ jobs:
             --auth-mode login \
             --output table || echo "Container not found or inaccessible."
 
-      - name: 🕒 Timestamp before Terraform Init
+      - name: 🕒 Timestamp Before Init
         run: date
 
       - name: 🚀 Terraform Init
@@ -65,22 +65,49 @@ jobs:
       - name: ✅ Terraform Validate
         run: terraform validate
 
-      - name: 🕒 Timestamp before Terraform Plan
+      - name: 🕒 Timestamp Before Plan
         run: date
 
-      - name: 📐 Terraform Plan (with timeout)
-        run: timeout 900 terraform plan -out=tfplan -input=false
+      - name: 📐 Terraform Plan with Debug Logging
+        run: |
+          export TF_LOG=DEBUG
+          export TF_LOG_PATH=terraform-plan.log
+          terraform plan -out=tfplan -input=false &
+          PID=$!
+          (sleep 900 && kill -9 $PID) 2>/dev/null & WATCHDOG=$!
+          wait $PID; EXIT_CODE=$?
+          kill $WATCHDOG
+          exit $EXIT_CODE
 
-      - name: 🕒 Timestamp after Terraform Plan
+      - name: 🕒 Timestamp After Plan
         run: date
 
-      - name: 🚀 Terraform Apply (main branch only)
+      - name: 🚀 Terraform Apply (main branch only, with timeout)
         if: github.ref == 'refs/heads/main'
-        run: timeout 1800 terraform apply -auto-approve -input=false tfplan
+        run: |
+          export TF_LOG=DEBUG
+          export TF_LOG_PATH=terraform-apply.log
+          terraform apply -auto-approve -input=false tfplan &
+          PID=$!
+          (sleep 1800 && kill -9 $PID) 2>/dev/null & WATCHDOG=$!
+          wait $PID; EXIT_CODE=$?
+          kill $WATCHDOG
+          exit $EXIT_CODE
 
-      - name: 🎉 Confirm successful deployment
+      - name: 🎉 Confirm Successful Deployment
+        if: success()
         run: echo "✅ Terraform deployment completed."
 
-      # Optional debugging step (remove after confirming)
-      # - name: 🔎 Debug TF_VAR variables
-      #   run: env | grep TF_VAR_
+      - name: 📤 Upload Terraform Plan Log (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-log
+          path: terraform-plan.log
+
+      - name: 📤 Upload Terraform Apply Log (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-apply-log
+          path: terraform-apply.log
