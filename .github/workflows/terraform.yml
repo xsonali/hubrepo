@@ -19,8 +19,7 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
-      # Terraform Variables
-      TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
+      # Optional envs (still export explicitly below to ensure usage)
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
       P2S_ROOT_CERT: ${{ secrets.p2s_root_cert }}
 
@@ -60,10 +59,14 @@ jobs:
         run: date
 
       - name: 🚀 Terraform Init
-        run: terraform init -input=false
+        run: |
+          export TF_VAR_admin_password="${{ secrets.ADMIN_PASSWORD }}"
+          terraform init -input=false
 
       - name: ✅ Terraform Validate
-        run: terraform validate
+        run: |
+          export TF_VAR_admin_password="${{ secrets.ADMIN_PASSWORD }}"
+          terraform validate
 
       - name: 🕒 Timestamp Before Plan
         run: date
@@ -72,6 +75,7 @@ jobs:
         run: |
           export TF_LOG=DEBUG
           export TF_LOG_PATH=terraform-plan.log
+          export TF_VAR_admin_password="${{ secrets.ADMIN_PASSWORD }}"
           terraform plan -out=tfplan -input=false &
           PID=$!
           (sleep 900 && kill -9 $PID) 2>/dev/null & WATCHDOG=$!
@@ -87,6 +91,7 @@ jobs:
         run: |
           export TF_LOG=DEBUG
           export TF_LOG_PATH=terraform-apply.log
+          export TF_VAR_admin_password="${{ secrets.ADMIN_PASSWORD }}"
           terraform apply -auto-approve -input=false tfplan &
           PID=$!
           (sleep 1800 && kill -9 $PID) 2>/dev/null & WATCHDOG=$!
