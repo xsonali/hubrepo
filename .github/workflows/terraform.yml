@@ -8,24 +8,27 @@ on:
 
 jobs:
   terraform:
+    name: 🛠️ Terraform Deployment
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     env:
+      # Azure service principal credentials
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      # Custom inputs
+      TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
       P2S_ROOT_CERT: ${{ secrets.p2s_root_cert }}
-      TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
-
 
     steps:
-      - name: ⬇️ Checkout code
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@v3
 
-      - name: ⚙️ Setup Terraform
+      - name: ⚙️ Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
@@ -33,29 +36,27 @@ jobs:
       - name: 🔐 Azure Login via CLI
         run: |
           az login --service-principal \
-            --username "${{ env.ARM_CLIENT_ID }}" \
-            --password "${{ env.ARM_CLIENT_SECRET }}" \
-            --tenant "${{ env.ARM_TENANT_ID }}"
-          az account set --subscription "${{ env.ARM_SUBSCRIPTION_ID }}"
+            --username "${ARM_CLIENT_ID}" \
+            --password "${ARM_CLIENT_SECRET}" \
+            --tenant "${ARM_TENANT_ID}"
+          az account set --subscription "${ARM_SUBSCRIPTION_ID}"
 
-      - name: 📦 Ensure Terraform backend container exists
+      - name: 📦 Create backend container (if needed)
         run: |
-          echo "Creating backend container if not exists..."
           az storage container create \
             --name ptstate \
             --account-name backendstorage747 \
             --auth-mode login || true
 
-      - name: 🔍 Log backend container status
+      - name: 🔍 Check backend container status
         run: |
-          echo "Checking status of Terraform backend container 'ptstate'..."
           az storage container show \
             --name ptstate \
             --account-name backendstorage747 \
             --auth-mode login \
             --output table || echo "Container not found or inaccessible."
 
-      - name: 🕒 Timestamp before Init
+      - name: 🕒 Timestamp before Terraform Init
         run: date
 
       - name: 🚀 Terraform Init
@@ -64,18 +65,22 @@ jobs:
       - name: ✅ Terraform Validate
         run: terraform validate
 
-      - name: 🕒 Timestamp before Plan
+      - name: 🕒 Timestamp before Terraform Plan
         run: date
 
       - name: 📐 Terraform Plan (with timeout)
         run: timeout 900 terraform plan -out=tfplan -input=false
 
-      - name: 🕒 Timestamp after Plan
+      - name: 🕒 Timestamp after Terraform Plan
         run: date
 
       - name: 🚀 Terraform Apply (main branch only)
         if: github.ref == 'refs/heads/main'
         run: timeout 1800 terraform apply -auto-approve -input=false tfplan
 
-      - name: 🎉 Confirm Deployment
-        run: echo "Terraform deployment to Azure completed successfully."
+      - name: 🎉 Confirm successful deployment
+        run: echo "✅ Terraform deployment completed."
+
+      # Optional debugging step (remove after confirming)
+      # - name: 🔎 Debug TF_VAR variables
+      #   run: env | grep TF_VAR_
