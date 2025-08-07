@@ -20,15 +20,15 @@ jobs:
       P2S_ROOT_CERT: ${{ secrets.p2s_root_cert }}
 
     steps:
-      - name: Checkout code
+      - name: ⬇️ Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Terraform
+      - name: ⚙️ Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
 
-      - name: Azure Login via CLI
+      - name: 🔐 Azure Login via CLI
         run: |
           az login --service-principal \
             --username "${{ env.ARM_CLIENT_ID }}" \
@@ -36,34 +36,44 @@ jobs:
             --tenant "${{ env.ARM_TENANT_ID }}"
           az account set --subscription "${{ env.ARM_SUBSCRIPTION_ID }}"
 
-      - name: Ensure Terraform backend container exists
+      - name: 📦 Ensure Terraform backend container exists
         run: |
+          echo "Creating backend container if not exists..."
           az storage container create \
             --name ptstate \
             --account-name backendstorage747 \
             --auth-mode login || true
 
-      - name: Log Terraform backend container status
+      - name: 🔍 Log backend container status
         run: |
           echo "Checking status of Terraform backend container 'ptstate'..."
           az storage container show \
             --name ptstate \
             --account-name backendstorage747 \
             --auth-mode login \
-            --output table
+            --output table || echo "Container not found or inaccessible."
 
-      - name: Terraform Init
-        run: terraform init
+      - name: 🕒 Timestamp before Init
+        run: date
 
-      - name: Terraform Validate
+      - name: 🚀 Terraform Init
+        run: terraform init -input=false
+
+      - name: ✅ Terraform Validate
         run: terraform validate
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      - name: 🕒 Timestamp before Plan
+        run: date
 
-      - name: Terraform Apply
+      - name: 📐 Terraform Plan (with timeout)
+        run: timeout 900 terraform plan -out=tfplan -input=false
+
+      - name: 🕒 Timestamp after Plan
+        run: date
+
+      - name: 🚀 Terraform Apply (main branch only)
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan
+        run: timeout 1800 terraform apply -auto-approve -input=false tfplan
 
-      - name: Confirm Deployment
+      - name: 🎉 Confirm Deployment
         run: echo "Terraform deployment to Azure completed successfully."
