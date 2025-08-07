@@ -1,0 +1,69 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+      P2S_ROOT_CERT: ${{ secrets.var.p2s_root_cert }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Azure Login via CLI
+        run: |
+          az login --service-principal \
+            --username "${{ env.ARM_CLIENT_ID }}" \
+            --password "${{ env.ARM_CLIENT_SECRET }}" \
+            --tenant "${{ env.ARM_TENANT_ID }}"
+          az account set --subscription "${{ env.ARM_SUBSCRIPTION_ID }}"
+
+      - name: Ensure Terraform backend container exists
+        run: |
+          az storage container create \
+            --name ptstate \
+            --account-name backendstorage747 \
+            --auth-mode login || true
+
+      - name: Log Terraform backend container status
+        run: |
+          echo "Checking status of Terraform backend container 'ptstate'..."
+          az storage container show \
+            --name ptstate \
+            --account-name backendstorage747 \
+            --auth-mode login \
+            --output table
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
+
+      - name: Confirm Deployment
+        run: echo "Terraform deployment to Azure completed successfully."
