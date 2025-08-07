@@ -17,7 +17,7 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
-      P2S_ROOT_CERT: ${{ secrets.var.p2s_root_cert }}
+      P2S_ROOT_CERT: ${{ secrets.p2s_root_cert }}
 
     steps:
       - name: Checkout code
