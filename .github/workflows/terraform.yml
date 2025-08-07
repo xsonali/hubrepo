@@ -18,6 +18,8 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
       P2S_ROOT_CERT: ${{ secrets.p2s_root_cert }}
+      TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
+
 
     steps:
       - name: ⬇️ Checkout code
