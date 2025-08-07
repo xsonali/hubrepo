@@ -17,11 +17,13 @@ variable "vmsize" {
 variable "p2s_root_cert" {
   description = "The root certificate for Point-to-Site VPN"
   type        = string
+  sensitive   = true
 }
 
 variable "ssh_public_key" {
   description = "SSH public key for VM access"
   type        = string
+  sensitive   = true
 }
 
 variable "os_type" {
