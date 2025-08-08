@@ -20,7 +20,7 @@ Spoke1 Spoke2 Spoke3 (Web) (App) (DB/Infra) | | | VMs VMs VMs + Monitoring
 - **Terraform (IaC)** for automated deployment
 - **Azure Virtual Networks & Subnets**
 - **Network Security Groups (NSGs), Route Tables**
-- **Azure Bastion**, **Azure Firewall**
+- **P2S VPN**, **Azure Firewall**
 - **Virtual Machines (Linux/Windows)**
 - **Azure Monitor**, **Log Analytics Workspace**
 - **RBAC**, **Resource Groups**, **Tags**
