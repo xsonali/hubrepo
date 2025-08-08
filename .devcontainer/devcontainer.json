@@ -1,0 +1,16 @@
+{
+  "name": "Terraform + Azure CLI",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "hashicorp.terraform",
+        "ms-azuretools.vscode-azureterraform",
+        "ms-vscode.azurecli"
+      ]
+    }
+  },
+  "postCreateCommand": "az --version && terraform -version"
+}
