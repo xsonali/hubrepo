@@ -28,8 +28,7 @@ Spoke1 Spoke2 Spoke3 (Web) (App) (DB/Infra) | | | VMs VMs VMs + Monitoring
 
 ## Architecture Overview
 
-The design follows a Hub-Spoke topology with secure access via P2S VPN and central monitoring in the third spoke. Workloads are distributed across spoke networks for web, application, and database/infra tiers.
-
+The design follows a Hub-Spoke topology with secure access through P2S VPN and centralized monitoring hosted in the third spoke. Workloads are distributed across the spoke networks to enable scalability for web, application, and database/infrastructure tiers.
 
 _This diagram illustrates the hub network architecture deployed in Microsoft Azure. <img width="425" height="422" alt="hub-vnet-rg-m617-2" src="https://github.com/user-attachments/assets/562ee602-d807-46b1-bd7c-0c7f0ac051bb" />
 
