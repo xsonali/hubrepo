@@ -15,7 +15,7 @@ This project builds a **secure, scalable enterprise-grade infrastructure** on Mi
 
 - Centralize private DNS zone management
 
-- Apply security best practices by implementing Azure Firewall
+- Apply security best practices by implementing Azure Firewall and Sentinel
 ---
 ## Architecture Overview
 
