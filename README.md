@@ -7,7 +7,7 @@ This project builds a **secure, scalable enterprise-grade infrastructure** on Mi
 
 - Provision secure virtual machines with P2S VPN access and Network Security Groups (NSGs)
 
-- Implement diagnostics, activity logging, and virtual machine monitoring
+- Implement diagnostics, activity logging, and firewall monitoring
 
 - Manage resources using Role-Based Access Control (RBAC) and enforce governance policies
 
