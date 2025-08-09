@@ -35,7 +35,8 @@ The design follows a Hub-Spoke topology with secure access via Azure Bastion and
 
 
 
-_This diagram illustrates the hub-spoke network architecture deployed in Microsoft Azure._
+_This diagram illustrates the hub network architecture deployed in Microsoft Azure._<img width="1164" height="1154" alt="hub-vnet-rg-m617" src="https://github.com/user-attachments/assets/94e05aaa-324c-4362-820f-f5532b9f0858" />
+
 
 
 ## Project Structure
