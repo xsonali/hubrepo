@@ -115,3 +115,4 @@ ________________________________________
 License
 This project is licensed under the MIT License. Feel free to fork and customize.
 ---
+Created and deployed by Gholam with the assistance of AI, Terraform, GitHub, and Visual Studio.
