@@ -13,7 +13,7 @@ This project builds a secure, scalable, enterprise-grade infrastructure on Micro
 ## Architecture Overview
 
 [ Internet ] | [ P2S VPN ] | [ Hub VNet ] / | 
-Spoke1 | Spoke2 | | | VMs | Security monitoiring by Sentinel
+Spoke1 | Spoke2 | VMs | Security monitoiring by Sentinel
 ---
 ## Technologies Used
 
