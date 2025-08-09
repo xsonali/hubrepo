@@ -9,6 +9,7 @@ This project builds a **secure, scalable enterprise-grade infrastructure** on Mi
 - Implement diagnostics, activity logging, and VM monitoring
 - Manage resources with RBAC and enforce governance
 - Automate everything using modular Terraform
+- Centralised private DNS management
 ---
 ## Architecture Overview
 
