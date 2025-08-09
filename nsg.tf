@@ -1,8 +1,8 @@
 # NSG for hub_mgmt
 resource "azurerm_network_security_group" "mgmt_nsg" {
   name                = "hub-mgmt-nsg"
-  location            = "Australia East"
-  resource_group_name = "hub_vnet_rg"
+  location            = azurerm_resource_group.hub_vnet_rg.location
+  resource_group_name = azurerm_resource_group.hub_vnet_rg.name
 
   security_rule {
     name                       = "Allow-RDP-From-Firewall"
@@ -10,7 +10,8 @@ resource "azurerm_network_security_group" "mgmt_nsg" {
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
-    source_address_prefix      = azurerm_firewall.hub_fw.ip_configuration[0].private_ip_address
+    source_address_prefix      = "${azurerm_firewall.hub_fw.ip_configuration[0].private_ip_address}/32"
+	source_port_range          = "*"
     destination_port_range     = "3389"
     destination_address_prefix = "*"
   }
