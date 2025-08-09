@@ -38,7 +38,7 @@ This diagram illustrates the hub network architecture deployed in Microsoft Azur
 
 ## Project Structure
 
-azure-hub-spoke-project/ ├── main.tf ├── variables.tf ├── outputs.tf ├── provider.tf ├── terraform.tfvars ├── modules/ │ ├── networking/ │ ├── compute/ │ ├── security/ │ └── monitoring/ | └── privateDNSzone | └── README.md
+azure-hub-spoke-project/ Backend.tf | firewall.tf | locals.tf | main.tf | privateDNSzone.tf | route.tf | nsg.tf | variables.tf | outputs.tf | README.md
 ---
 ## Getting Started
 
