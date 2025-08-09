@@ -31,7 +31,53 @@ Spoke1 Spoke2 Spoke3 (Web) (App) (DB/Infra) | | | VMs VMs VMs + Monitoring
 The design follows a Hub-Spoke topology with secure access via Point-to-Site (P2S) VPN and centralized monitoring through Azure Sentinel. Azure Sentinel is deployed in a separate resource group by importing the existing workspace to improve manageability and scalability.
 
 
-_This diagram illustrates the hub-spoke network architecture deployed in Microsoft Azure._
+_This diagram illustrates the hub-spoke network architecture deployed in Microsoft Azure._ (Please consider the diagram, which could be a little different from the actual deployment)
+
+                            +---------------------+
+                            |       Internet      |
+                            +----------+----------+
+                                       |
+                                       |
+                             +---------v---------+
+                             |    P2S VPN Gateway |  <-- Secure remote access via Point-to-Site VPN
+                             +---------+---------+
+                                       |
+                           +-----------v-----------+
+                           |       Hub VNet        |
+                           |  +-----------------+  |
+                           |  | Azure Firewall  |  |  <-- Centralized security & firewall policies
+                           |  +-----------------+  |
+                           +-----------+-----------+
+                                       |
+                +----------------------+------------------------+
+                |                      |                        |
+       +--------v--------+    +--------v--------+       +-------v--------+
+       |    Spoke VNet1  |    |    Spoke VNet2  |       |   Spoke VNet3  |
+       |   (Web Tier)    |    |   (App Tier)    |       | (DB / Infra)   |
+       | +-------------+|    | +-------------+|       | +-------------+|
+       | | Virtual     ||    | | Virtual     ||       | | Virtual     ||
+       | | Machines    ||    | | Machines    ||       | | Machines    ||
+       | +-------------+|    | +-------------+|       | +-------------+|
+       +----------------+    +----------------+       +----------------+
+                |                      |                        |
+       +--------v--------+    +--------v--------+       +-------v--------+
+       | Network Security|    | Network Security|       | Network Security|
+       | Groups (NSGs)   |    | Groups (NSGs)   |       | Groups (NSGs)   |
+       +-----------------+    +-----------------+       +-----------------+
+
+                           (All logs forwarded to)
+
+                               +-----------------+
+                               | Log Analytics   |
+                               | Workspace       |  <-- Centralized log collection
+                               +-----------------+
+                                        |
+                                        |
+                               +-----------------+
+                               | Azure Sentinel  |  <-- Security monitoring & alerting
+                               +-----------------+
+
+
 
 
 ## Project Structure
