@@ -3,13 +3,19 @@
 This project builds a **secure, scalable enterprise-grade infrastructure** on Microsoft Azure using Terraform. It uses a **Hub-Spoke network topology**, integrates **virtual machines**, **monitoring**, and **role-based access control**, all automated via Infrastructure as Code (IaC).
 ---
 ## Objectives
+Deploy a hub-spoke virtual network architecture with isolated workloads
 
-- Deploy hub-spoke VNet architecture with isolated workloads
-- Provision secure virtual machines using P2S VPN and NSGs
-- Implement diagnostics, activity logging, and VM monitoring
-- Manage resources with RBAC and enforce governance
-- Automate everything using modular Terraform
-- Centralised private DNS zone management
+Provision secure virtual machines with P2S VPN access and Network Security Groups (NSGs)
+
+Implement diagnostics, activity logging, and virtual machine monitoring
+
+Manage resources using Role-Based Access Control (RBAC) and enforce governance policies
+
+Automate deployments using modular Terraform configurations
+
+Centralize private DNS zone management
+
+Apply security best practices by implementing Azure Firewall
 ---
 ## Architecture Overview
 
