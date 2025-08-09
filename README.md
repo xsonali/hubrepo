@@ -12,8 +12,8 @@ This project builds a secure, scalable, enterprise-grade infrastructure on Micro
 ---
 ## Architecture Overview
 
-[ Internet ] | [ Azure Bastion ] | [ Hub VNet ] / | 
-Spoke1 Spoke2 Spoke3 (Web) (App) (DB/Infra) | | | VMs VMs VMs + Monitoring
+[ Internet ] | [ P2S VPN ] | [ Hub VNet ] / | 
+Spoke1 Spoke2 | | | VMs VMs VMs + Monitoring
 ---
 ## Technologies Used
 
