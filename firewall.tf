@@ -50,10 +50,10 @@ resource "azurerm_firewall_policy" "fw_policy" {
 }
 
 # ------------------------------------------------------------------
-# Rule Collection Group with an RDP Rule
+# NAT Rule Collection Group
 # ------------------------------------------------------------------
-resource "azurerm_firewall_policy_rule_collection_group" "rdp_rule_group" {
-  name               = "DefaultRuleCollectionGroup"
+resource "azurerm_firewall_policy_rule_collection_group" "rdp_nat_rule_group" {
+  name               = "RDPNatRuleCollectionGroup"  # Unique name
   firewall_policy_id = azurerm_firewall_policy.fw_policy.id
   priority           = 100
 
@@ -74,8 +74,11 @@ resource "azurerm_firewall_policy_rule_collection_group" "rdp_rule_group" {
   }
 }
 
+# ------------------------------------------------------------------
+# Network Rule Collection Group
+# ------------------------------------------------------------------
 resource "azurerm_firewall_policy_rule_collection_group" "rdp_network_rule_group" {
-  name               = "DefaultRuleCollectionGroup"
+  name               = "RDPNetworkRuleCollectionGroup"  # Unique name
   firewall_policy_id = azurerm_firewall_policy.fw_policy.id
   priority           = 200
 
