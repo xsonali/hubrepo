@@ -1,6 +1,6 @@
 # Azure Hub-Spoke Infrastructure with Terraform
 
-This project builds a **secure, scalable enterprise-grade infrastructure** on Microsoft Azure using Terraform. It uses a **Hub-Spoke network topology**, integrates **virtual machines**, **monitoring**, and **role-based access control**, all automated via Infrastructure as Code (IaC).
+This project builds a **secure, scalable enterprise-grade infrastructure** on Microsoft Azure using Terraform. It uses a **Hub-Spoke network topology**, integrates **virtual machines**, **monitoring**, and **role-based access control**, all automated via Infrastructure as Code (IaC) and deployed with GitHub code
 ---
 ## Objectives
 
