@@ -12,7 +12,7 @@ This project builds a **secure, scalable enterprise-grade infrastructure** on Mi
 ---
 ## Architecture Overview
 
-[ Internet ] | [ P2S VPN ] | [ Hub ] / | 
+[ Internet ] | [ P2S VPN ] |  
 Hub | Spoke1 | Spoke2 | VMs | Monitoring
 ---
 ## Technologies Used
