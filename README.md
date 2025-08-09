@@ -65,7 +65,7 @@ ________________________________________
 Key Learnings & Outcomes
 •	Real-world Azure design following best practices
 •	Full-stack IaC deployment using reusable modules
-•	Secure access architecture with Bastion and no public IPs
+•	Secure access architecture with P2S VPN
 •	Visibility and control via monitoring and logging
 •	Ready-to-showcase architecture for portfolio or interviews
 ________________________________________
