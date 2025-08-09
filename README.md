@@ -2,8 +2,6 @@
 
 This project builds a secure, scalable, enterprise-grade infrastructure on Microsoft Azure using Terraform. It employs a Hub-Spoke network topology and integrates firewall, P2S, virtual machines, monitoring, and role-based access control — all automated via Infrastructure as Code (IaC) and deployed using GitHub (Codespaces).
 ---
-Please note: Created and deployed by Gholam with the assistance of AI, Terraform, GitHub, Docker Desktop, and Visual Studio.
----
 ## Objectives
 
 - Deploy hub-spoke VNet architecture with isolated workloads
@@ -117,4 +115,4 @@ ________________________________________
 License
 This project is licensed under the MIT License. Feel free to fork and customize.
 ---
-Created and deployed by Gholam with the assistance of AI, Terraform, GitHub, Docker Desktop, and Visual Studio.
+Please note: Created and deployed by Gholam with the assistance of AI, Terraform, GitHub, Docker Desktop, and Visual Studio.
