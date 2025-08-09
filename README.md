@@ -28,10 +28,7 @@ Spoke1 Spoke2 Spoke3 (Web) (App) (DB/Infra) | | | VMs VMs VMs + Monitoring
 
 ## Architecture Overview
 
-The design follows a Hub-Spoke topology with secure access via P2S VPN and central monitoring in the third spoke. Workloads are distributed across spoke networks for web, application, and database/infra tiers.
-
-
-
+The design follows a Hub-Spoke topology with secure access via Point-to-Site (P2S) VPN and centralized monitoring through Azure Sentinel. Azure Sentinel is deployed in a separate resource group by importing the existing workspace to improve manageability and scalability.
 
 
 _This diagram illustrates the hub-spoke network architecture deployed in Microsoft Azure._
