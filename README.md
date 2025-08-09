@@ -5,7 +5,7 @@ This project builds a **secure, scalable enterprise-grade infrastructure** on Mi
 ## Objectives
 
 - Deploy hub-spoke VNet architecture with isolated workloads
-- Provision secure virtual machines using Bastion and NSGs
+- Provision secure virtual machines using P2S VPN and NSGs
 - Implement diagnostics, activity logging, and VM monitoring
 - Manage resources with RBAC and enforce governance
 - Automate everything using modular Terraform
