@@ -50,11 +50,21 @@ resource "azurerm_network_interface" "mgmt_nic" {
     subnet_id                     = azurerm_subnet.hub_mgmt.id
     private_ip_address_allocation = "Static"
     private_ip_address            = "10.0.3.4"
+    public_ip_address_id          = azurerm_public_ip.mgmt_pip.id
   }
 
   tags = {
     environment = local.prefix_hub
   }
+}
+
+# VM public IP
+resource "azurerm_public_ip" "mgmt_pip" {
+  name                = "${local.prefix_hub}-pip"
+  location            = local.region
+  resource_group_name = azurerm_resource_group.hub_vnet_rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 # Virtual Machine
