@@ -19,4 +19,10 @@ resource "random_password" "password" {
   count  = var.admin_password == null ? 1 : 0
   length = 20
 }
+
+resource "random_string" {
+  length  = 4
+  upper   = false
+  special = false
+}
     
