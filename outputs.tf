@@ -10,7 +10,7 @@ output "firewall_public_ip" {
 }
 
 output "vm_public_ip" {
-  value = azurerm_network_interface.mgmt_nic.private_ip_address
+  value = azurerm_public_ip.mgmt_pip.ip_address
 }
 
 output "vpn_gateway_ip" {
