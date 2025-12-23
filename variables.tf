@@ -4,7 +4,7 @@ variable "admin_user" {
 }
 
 variable "admin_password" {
-  description = "Password for VM"
+  description = "Password for admin user"
   type        = string
   sensitive   = true
 }
@@ -31,8 +31,7 @@ variable "os_type" {
   type        = string
   default     = "linux"
   validation {
-    condition     = contains(["linux", "windows"], var.os_type)
-    error_message = "os_type must be either 'linux' or 'windows'."
+    condition     = contains (["linux", "windows"], var.os_type)
+	error_message = "os_type must be either 'linux' or 'windows'."
   }
 }
-

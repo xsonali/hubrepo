@@ -1,5 +1,5 @@
-output "user_password" {
-  description = "The user password (user-supplied or auto-generated)."
+output "admin_password" {
+  description = "The admin password (user-supplied or auto-generated)."
   value       = local.password
   sensitive   = true
 }
@@ -10,7 +10,7 @@ output "firewall_public_ip" {
 }
 
 output "vm_public_ip" {
-  value = azurerm_network_interface.mgmt_nic.private_ip_address
+  value = azurerm_public_ip.mgmt_pip.ip_address
 }
 
 output "vpn_gateway_ip" {
@@ -22,6 +22,7 @@ output "vm_admin_username" {
 }
 
 output "firewall_private_ip" {
-  value = azurerm_firewall.hub_fw.ip_configuration[0].private_ip_address
+  value  = azurerm_firewall.hub_fw.ip_configuration[0].private_ip_address
 }
+
 
