@@ -3,28 +3,25 @@ terraform {
   
   required_providers {
     azurerm = {
-	  source = "hashicorp/azurerm"
-	  version = "~>4.0.0"
-	}
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
   }
 }
 
-provider "azurerm" [
-  features {
-    resource_group {
-	  prevent_deletion_if_contains_resources = false
-	}
-  }
-  
+provider "azurerm" {
+  features {}  # mandatory, can be empty
+
   subscription_id = "09624d5e-dd06-4d7b-9cd9-462e3f5416d0"
 }
 
-resource "random_password "password" {
-  count = var.admin_password == null ? 1 : 0
-  length = 20
+resource "random_password" "admin" {
+  count   = var.admin_password == null ? 1 : 0
+  length  = 20
+  special = true
 }
 
-resource "random_string" {
+resource "random_string" "suffix" {
   length  = 4
   upper   = false
   special = false
