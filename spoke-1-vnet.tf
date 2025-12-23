@@ -16,14 +16,8 @@ resource "azurerm_virtual_network" "spoke1_vnet" {
   location             = local.region
   resource_group_name  = azurerm_resource_group.spoke1_rg.name
   address_space        = [local.spoke1_address_space]
-  }
-  
-  tags = {
-    environment = "Dev"
-	owner       = "Admin"
-	workload    = "spoke1-vnet"
-  }
 }
+  
 
 #Spoke1 subnets
 resource "azurerm_subnet" "spoke1_subnets" {

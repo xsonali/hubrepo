@@ -110,33 +110,37 @@ resource "azurerm_public_ip" "hub_vnet_gw_pip1" {
 # Virtual Network Gateway
 resource "azurerm_virtual_network_gateway" "hub_vnet_gw" {
   name                = "Hub-VPN-GW1"
-  location            = azurerm_resource_group.hub_vnet_gw.location
+  location            = azurerm_resource_group.hub_rg.location
   resource_group_name = azurerm_resource_group.hub_rg.name
-  
+
   type     = "Vpn"
   vpn_type = "RouteBased"
-  
+
   active_active = false
   enable_bgp    = false
   sku           = "VpnGw1"
-  
+
   ip_configuration {
-    name                           = "vnetGWConfig"
-	public_ip_address_id           = azurerm_public_ip.hub_vnet_gw_pip1.id
-	private_ip_address_allocation  = "Dynamic"
-	subnet_id                      = azurerm_subnet.hub_subnets["GatewaySubnet"].id
-	
-	vpn_client_configuration {
-	  address_space = ["192.168.1.0/24"]
-	  
-	  root_certificate {
-	    name              = "P2SRoot"
-		public_cert_data  = var.p2s_root_cert
-	  }
-	}
-	  
-	depends_on = [azurerm_public_ip.hub_vnet_gw_pip1"]
+    name                          = "vnetGWConfig"
+    public_ip_address_id          = azurerm_public_ip.hub_vnet_gw_pip1.id
+    private_ip_address_allocation = "Dynamic"
+    subnet_id                     = azurerm_subnet.hub_subnets["GatewaySubnet"].id
+  }
+
+  vpn_client_configuration {
+    address_space = ["192.168.1.0/24"]
+
+    root_certificate {
+      name             = "P2SRoot"
+      public_cert_data = var.p2s_root_cert
+    }
+  }
+
+  depends_on = [
+    azurerm_public_ip.hub_vnet_gw_pip1
+  ]
 }
+
 
   
   
