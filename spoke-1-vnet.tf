@@ -1,9 +1,8 @@
 # Spoke1 resource group
-resource "azurerm_resource_group" "spoke1_rg"
+resource "azurerm_resource_group" "spoke1_rg" {
   name     = local.spoke1_resource_group
   location = local.region
-  }
-  
+    
   tags = {
     environment = "Dev"
 	owner       = "Admin"
