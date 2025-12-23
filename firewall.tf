@@ -6,22 +6,22 @@ resource "azurerm_firewall" "hub_fw" {
   sku_name            = "AZFW_VNet"
   sku_tier            = "Standard"
   firewall_policy_id  = azurerm_firewall_policy.fw_policy.id
-  
+
   ip_configuration {
-    name                   = "fw-configuration"
-    subnet_id              = azurerm_subnet.hub_subnets["AzureFirewallSubnet"].id
-    public_ip_address_id   = azurerm_public_ip.firewall_pip1.id
+    name                 = "fw-configuration"
+    subnet_id            = azurerm_subnet.hub_subnets["AzureFirewallSubnet"].id
+    public_ip_address_id = azurerm_public_ip.firewall_pip1.id
   }
-  
+
   tags = {
     environment = "Dev"
-	owner       = "Admin"
-	workload    = "hub-fw"
+    owner       = "Admin"
+    workload    = "hub-fw"
   }
-  
+
   depends_on = [
     azurerm_public_ip.firewall_pip1,
-	azurerm_subnet.hub_subnets["AzureFirewallSubnet"]
+    azurerm_subnet.hub_subnets["AzureFirewallSubnet"]
   ]
 }
 
@@ -32,11 +32,11 @@ resource "azurerm_public_ip" "firewall_pip1" {
   allocation_method   = "Static"
   sku                 = "Standard"
   zones               = ["1"]
-  
+
   tags = {
     environment = "Dev"
-	owner       = "Admin"
-	workload    = "hub-fw"
+    owner       = "Admin"
+    workload    = "hub-fw"
   }
 }
 
@@ -50,13 +50,13 @@ resource "azurerm_firewall_policy_rule_collection_group" "rdp_nat_rule_group" {
   name               = "RDPNatRuleCollectionGroup" # Unique name
   firewall_policy_id = azurerm_firewall_policy.fw_policy.id
   priority           = 100
-  
+
   nat_rule_collection {
-    name      = "rdp-nat"
-	priority  = 100
-	action    = "Dnat"
-	
-	rule {
+    name     = "rdp-nat"
+    priority = 100
+    action   = "Dnat"
+
+    rule {
       name                = "rdp-desktop"
       source_addresses    = ["192.168.1.0/24"]
       destination_ports   = ["3389"]
@@ -72,13 +72,13 @@ resource "azurerm_firewall_policy_rule_collection_group" "rdp_network_rule_group
   name               = "RDPNetworkRuleCollectionGroup"
   firewall_policy_id = azurerm_firewall_policy.fw_policy.id
   priority           = 200
-  
+
   network_rule_collection {
-    name      = "AllowRDPInboundOutbound"
-	priority  = 100
-	action    = "Allow"
-	
-	rule {
+    name     = "AllowRDPInboundOutbound"
+    priority = 100
+    action   = "Allow"
+
+    rule {
       name                  = "Allow-RDP-Inbound"
       protocols             = ["TCP"]
       source_addresses      = ["192.168.1.0/24"]

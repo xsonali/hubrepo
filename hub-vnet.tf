@@ -17,7 +17,7 @@ resource "azurerm_virtual_network" "hub_vnet" {
   resource_group_name = azurerm_resource_group.hub_rg.name
   address_space       = [local.hub_address_space]
   
-   tags = {
+  tags = {
     environment = "Dev"
 	owner       = "Admin"
 	workload    = "hub-vnet"

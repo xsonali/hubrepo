@@ -15,8 +15,8 @@ resource "azurerm_route_table" "hub_mgmt_rt" {
 
   tags = {
     environment = "Dev"
-	owner       = "Admin"
-	workload    = "hub-route"
+    owner       = "Admin"
+    workload    = "hub-route"
   }
 }
 
