@@ -2,11 +2,11 @@
 resource "azurerm_resource_group" "hub_rg" {
   name     = local.hub_resource_group
   location = local.region
-    
+
   tags = {
     environment = "Dev"
-	owner       = "Admin"
-	workload    = "hub-vnet"
+    owner       = "Admin"
+    workload    = "hub-vnet"
   }
 }
 
@@ -16,11 +16,11 @@ resource "azurerm_virtual_network" "hub_vnet" {
   location            = azurerm_resource_group.hub_rg.location
   resource_group_name = azurerm_resource_group.hub_rg.name
   address_space       = [local.hub_address_space]
-  
+
   tags = {
     environment = "Dev"
-	owner       = "Admin"
-	workload    = "hub-vnet"
+    owner       = "Admin"
+    workload    = "hub-vnet"
   }
 }
 
@@ -48,8 +48,8 @@ resource "azurerm_network_interface" "mgmt_nic" {
 
   tags = {
     environment = "Dev"
-	owner       = "Admin"
-	workload    = "hub-vnet"
+    owner       = "Admin"
+    workload    = "hub-vnet"
   }
 }
 
@@ -60,41 +60,41 @@ resource "azurerm_virtual_machine" "mgmt_vm" {
   location             = azurerm_resource_group.hub_rg.location
   network_iterface_ids = [azurerm_network_interface.mgmt_nic.id]
   vm_size              = var.vmsize
-  
+
   storage_image_reference {
     publisher = "MicrosoftWindowsServer"
-	offer     = "WindowsServer"
-	sku       = "2022-Datacener"
-	version   = "latest"
+    offer     = "WindowsServer"
+    sku       = "2022-Datacener"
+    version   = "latest"
   }
-  
+
   storage_os_disk {
     name              = "${local.prefix_hub}-mgmt-vm-disk"
-	caching           = "ReadWrite"
-	create_option     = "FromImage"
-	managed_disk_type = "Standard_LRS"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
   }
-    
+
   os_profile {
     computer_name  = "{local.prefix_hub}-mgmt-op-vm"
-	admin_username = var.admin_user
-	admin_password = var.admin_password
+    admin_username = var.admin_user
+    admin_password = var.admin_password
   }
-  
+
   os_profile_windows_config {
     provision_vm_agent        = true
-	enable_automatic_upgrades = true
+    enable_automatic_upgrades = true
   }
-  
+
   tags = {
     environment = "Dev"
-	owner       = "Admin"
-	workload    = "hub-vnet"
+    owner       = "Admin"
+    workload    = "hub-vnet"
   }
-  
+
   depends_on = [
     azurerm_network_interface.mgmt_nic
-	]
+  ]
 }
 
 # Public IP
@@ -102,7 +102,7 @@ resource "azurerm_public_ip" "hub_vnet_gw_pip1" {
   name                = "Hub-GW-PIP1"
   location            = azurerm_resource_group.hub_rg.location
   resource_group_name = azurerm_resource_group.hub_rg.name
-  
+
   allocation_method = "Static"
   sku               = "Standard"
 }
@@ -142,8 +142,8 @@ resource "azurerm_virtual_network_gateway" "hub_vnet_gw" {
 }
 
 
-  
-  
+
+
 
 
 

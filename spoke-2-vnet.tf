@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "spoke2_rg" {
 
 # Spoke2 virtual network
 resource "azurerm_virtual_network" "spoke2_vnet" {
-  name                = local.spoke2_vnet_name
+  name                = "${local.prefix_spoke2}-vnet"
   location            = azurerm_resource_group.spoke2_rg.location
   resource_group_name = azurerm_resource_group.spoke2_rg.name
   address_space       = [local.spoke2_address_space]
