@@ -50,7 +50,7 @@ resource "azurerm_network_interface" "mgmt_nic" {
 
   ip_configuration {
     name                          = "${local.prefix_hub}-mgmt-ipconfig"
-    subnet_id                     = azurerm_subnet.hub_subnets["HubMgmtSubnet"].id
+    subnet_id                     = azurerm_subnet.hub_subnets["hub_mgmt"].id
     private_ip_address_allocation = "Static"
     private_ip_address            = "10.0.3.4"
     public_ip_address_id          = azurerm_public_ip.mgmt_pip.id

@@ -1,3 +1,29 @@
+variable "hub_subnets" {
+  default = {
+    AzureFirewallSubnet = "10.0.1.0/26"
+    GatewaySubnet       = "10.0.2.0/27"
+    hub_mgmt            = "10.0.3.0/27"
+}
+
+variable "spoke1_subnets" {
+  workload = "10.1.1.0/24"
+  mgmt     = "10.1.2.0/24"
+}
+
+variable "spoke2_subnets" {
+  workload = "10.2.1.0/24"
+  mgmt     = "10.2.2.0/24"
+}
+
+resource "azurerm_subnet" "hub_subnets" {
+  for_each             = var.hub_subnets
+  name                 = each.key
+  resource_group_name  = azurerm_resource_group.hub_rg.name
+  virtual_network_name = azurerm_virtual_network.hub_vnet.name
+  address_prefixes     = [each.value]
+}
+
+
 variable "admin_user" {
   description = "Username for VM"
   default     = "localadmin"

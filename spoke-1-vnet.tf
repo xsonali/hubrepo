@@ -53,7 +53,7 @@ resource "azurerm_network_interface" "spoke1_workload_nic" {
 
   ip_configuration {
     name                          = "ipconfig1"
-    subnet_id                     = azurerm_subnet.spoke1_subnets["Workloadsubnet"].id
+    subnet_id                     = azurerm_subnet.spoke1_subnets["workload"].id
     private_ip_address_allocation = "Dynamic"
   }
 

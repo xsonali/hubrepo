@@ -27,7 +27,7 @@ resource "azurerm_network_security_group" "mgmt_nsg" {
 
 # Attach NSGs to Subnets
 resource "azurerm_subnet_network_security_group_association" "mgmt_nsg_assoc" {
-  subnet_id                 = azurerm_subnet.hub_subnets["HubMgmtSubnet"].id
+  subnet_id                 = azurerm_subnet.hub_subnets["hub_mgmt"].id
   network_security_group_id = azurerm_network_security_group.mgmt_nsg.id
 }
 
