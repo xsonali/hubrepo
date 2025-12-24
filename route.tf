@@ -24,14 +24,14 @@ resource "azurerm_route_table" "hub_mgmt_rt" {
 # Associate Route Table to HubMgmtSubnet
 # ------------------------------------------------------------------
 resource "azurerm_subnet_route_table_association" "hub_mgmt_rt_assoc" {
-  subnet_id      = azurerm_subnet.hub_mgmt.id
+  subnet_id      = azurerm_subnet.hub_subnets["hub_mgmt"].id
   route_table_id = azurerm_route_table.hub_mgmt_rt.id
 }
 
 # Route to Gateway to mgmt subnet
 resource "azurerm_route_table" "gateway_rt" {
   name                = "gateway-subnet-rt"
-  location            = azurerm_resource_group.hub_vnet_rg.location
+  location            = azurerm_resource_group.hub_rg.location
   resource_group_name = azurerm_resource_group.hub_rg.name
 
   route {

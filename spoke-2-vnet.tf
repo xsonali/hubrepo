@@ -31,12 +31,6 @@ resource "azurerm_subnet" "spoke2_subnets" {
   resource_group_name  = azurerm_resource_group.spoke2_rg.name
   virtual_network_name = azurerm_virtual_network.spoke2_vnet.name
   address_prefixes     = [each.value]
-
-  tags = {
-    environment = "Dev"
-    owner       = "Admin"
-    workload    = "spoke2-vnet"
-  }
 }
 
 # Spoke2 to Hub virtual network peering
