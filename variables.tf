@@ -91,14 +91,3 @@ variable "os_type" {
     error_message = "os_type must be either 'linux' or 'windows'."
   }
 }
-
-# =====================
-# Hub Subnet Resources
-# =====================
-resource "azurerm_subnet" "hub_subnets" {
-  for_each             = var.hub_subnets
-  name                 = each.key
-  resource_group_name  = azurerm_resource_group.hub_rg.name
-  virtual_network_name = azurerm_virtual_network.hub_vnet.name
-  address_prefixes     = [each.value]
-}
