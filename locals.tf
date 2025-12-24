@@ -1,6 +1,6 @@
 locals {
   region   = "australiaeast"
-  password = try(random_password.password[0].result, var.admin_password)
+  password = try(random_password.admin[0].result, var.admin_password)
 
   # Hub
   prefix_hub         = "hub"

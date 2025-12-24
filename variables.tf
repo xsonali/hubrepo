@@ -6,6 +6,7 @@ variable "admin_user" {
 variable "admin_password" {
   description = "Password for admin user"
   type        = string
+  default     = null
   sensitive   = true
 }
 
