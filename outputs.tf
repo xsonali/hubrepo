@@ -1,6 +1,6 @@
 output "admin_password" {
   description = "The admin password (user-supplied or auto-generated)."
-  value       = local.admin_password
+  value       = local.password
   sensitive   = true
 }
 
@@ -14,7 +14,7 @@ output "vm_public_ip" {
 }
 
 output "vpn_gateway_ip" {
-  value = azurerm_public_ip.hub_vpn_gw_pip1.ip_address
+  value = azurerm_public_ip.hub_vnet_gw_pip1.ip_address
 }
 
 output "vm_admin_username" {
