@@ -1,41 +1,4 @@
 # =====================
-# Hub Subnets
-# =====================
-variable "hub_subnets" {
-  description = "Subnets for the Hub VNet"
-  type = map(string)
-  default = {
-    AzureFirewallSubnet = "10.0.1.0/26"
-    GatewaySubnet       = "10.0.2.0/27"
-    hub_mgmt            = "10.0.3.0/27"
-  }
-}
-
-# =====================
-# Spoke1 Subnets
-# =====================
-variable "spoke1_subnets" {
-  description = "Subnets for Spoke1 VNet"
-  type = map(string)
-  default = {
-    workload = "10.1.1.0/24"
-    mgmt     = "10.1.2.0/24"
-  }
-}
-
-# =====================
-# Spoke2 Subnets
-# =====================
-variable "spoke2_subnets" {
-  description = "Subnets for Spoke2 VNet"
-  type = map(string)
-  default = {
-    workload = "10.2.1.0/24"
-    mgmt     = "10.2.2.0/24"
-  }
-}
-
-# =====================
 # Admin Credentials
 # =====================
 variable "admin_user" {
